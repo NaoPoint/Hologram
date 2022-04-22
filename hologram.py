@@ -1,23 +1,28 @@
+#set VLC to loop mode before running this script
 import os
 import requests
 import time
 
 starttime = time.time()
+lastVideo = None
 
 while True:	#infinite loop
 	try:
-		res = requests.post('http://192.168.1.15:5000/get')	#flask endpoint
+		res = requests.post('http://192.168.1.100:5000/get')	#flask endpoint
 		videoNumber = res.json()
 
 		if(videoNumber):	#map is active
-			currentDir = os.path.dirname(os.path.realpath(__file__))	#current script path
-			fullPath = currentDir + "/media/" + videoNumber + ".mp4"	#path to video
-		
-			if os.path.isfile(fullPath):	#check if video exists
-				os.system("start " + fullPath)	#play video
-				print(videoNumber)
-			else:
-				raise Exception(videoNumber + " is not a valid video number")
+			if(videoNumber != lastVideo):	#point changed (else do nothing)
+				lastVideo = videoNumber
+
+				currentDir = os.path.dirname(os.path.realpath(__file__))	#current script path
+				fullPath = currentDir + "/media/" + videoNumber + ".mp4"	#path to video
+			
+				if os.path.isfile(fullPath):	#check if video exists
+					os.system("start " + fullPath)	#play video
+					print(videoNumber)
+				else:
+					raise Exception(videoNumber + " is not a valid video number")
 		else:
 			raise Exception("Map is not active")
 
