@@ -4,6 +4,7 @@ import requests
 import time
 
 CURRENTDIR = os.path.dirname(os.path.realpath(__file__))	#current script path
+PARAMETERS = 'vlc --repeat --fullscreen --video-on-top --no-osd'
 STANDBYTIME = 120	#time before stand by
 
 starttime = time.time()
@@ -18,7 +19,7 @@ def playVideo(num):
 	fullPath = CURRENTDIR + '/media/' + num + '.mp4'	#path to video
 
 	if os.path.isfile(fullPath):	#check if video exists
-		os.system('start ' + fullPath)	#play video
+		os.system('start ' + PARAMETERS + ' ' + fullPath)	#play video
 		print(num)
 	else:
 		raise Exception(num + ' is not a valid video number')
